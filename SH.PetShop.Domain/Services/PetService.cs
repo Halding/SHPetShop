@@ -8,9 +8,12 @@ namespace SH.PetShop.Domain.Services
 {
     public class PetService : IPetService
     {
+
+        private IPetRepositstorie _repo;
+        
         public PetService(IPetRepositstorie repo)
         {
-            
+            _repo = repo;
         }
 
         public List<Pet> GetAllPets()

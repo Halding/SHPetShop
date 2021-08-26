@@ -8,6 +8,11 @@ namespace SH.PetShop.UI
         {
             Console.WriteLine(input);
         }
+
+        public string CRL()
+        {
+            return Console.ReadLine();
+        }
         
     }
 }

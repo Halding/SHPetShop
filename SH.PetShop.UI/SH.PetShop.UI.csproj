@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SH.PetShop.Core\SH.PetShop.Core.csproj" />
+      <ProjectReference Include="..\SH.PetShop.Infrastructure.Data\SH.PetShop.Infrastructure.Data.csproj" />
+    </ItemGroup>
+
+</Project>

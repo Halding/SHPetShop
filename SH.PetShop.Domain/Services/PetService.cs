@@ -18,17 +18,17 @@ namespace SH.PetShop.Domain.Services
 
         public List<Pet> GetAllPets()
         {
-            throw new NotImplementedException();
+            return _repo.GetAllPets();
         }
 
-        public Pet CreatePet(string name, string color, DateTime birthday, DateTime soldDate, double price)
+        public Pet CreatePet(string name, PetType type, string color, DateTime birthday, DateTime soldDate, double price)
         {
-            throw new NotImplementedException();
+            return _repo.AddPet(name, type,color,price,birthday,soldDate );
         }
 
         public Pet DeletePet(int id)
         {
-            throw new NotImplementedException();
+            return _repo.RemovePet(id);
         }
 
         public List<Pet> SearchPetByType(PetType type)

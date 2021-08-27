@@ -9,6 +9,7 @@ namespace SH.PetShop.UI
     public class Menu
     {
         private readonly IPetService _service;
+        private readonly IPetTypeService _petTypeService;
         private Util _ = new Util();
         private StringContants SC = new StringContants();
         private int _menuSeleceted;
@@ -24,9 +25,11 @@ namespace SH.PetShop.UI
             
         };
 
-        public Menu(IPetService service)
+        public Menu(IPetService service, IPetTypeService typeService)
         {
             _service = service;
+            _petTypeService = typeService;
+
         }
 
         public void ShowMenu()
@@ -37,16 +40,7 @@ namespace SH.PetShop.UI
             {
                 _.CWL($"Press ({i + 1}) {menuItems[i]}");
             }
-
-            string strInput = _.CRL();
-            int intInput;
-            while (!int.TryParse(strInput,out intInput))
-            {
-                _.CWL(StringContants.IntInvalid);
-                strInput = _.CRL();
-            }
-
-            _menuSeleceted = intInput;
+            _menuSeleceted = IntInput();
         }
 
         public void MenuSwitch()
@@ -57,10 +51,13 @@ namespace SH.PetShop.UI
                 {
                 
                     case 1:
+                        PrintPetList();
                         break;
                     case 2:
+                        AddPet();
                         break;
                     case 3:
+                        RemovePet();
                         break;
                     case 4:
                         break;
@@ -71,10 +68,16 @@ namespace SH.PetShop.UI
                     _.CRL();
                         break;
                 }
-                
-                
+                ShowMenu();
             }
             
+        }
+
+        public void RemovePet()
+        {
+            _.CWL(StringContants.RemovePetById);
+            int intInput = IntInput();
+            _service.DeletePet(intInput);
         }
 
         public void PrintPetList()
@@ -83,10 +86,59 @@ namespace SH.PetShop.UI
 
             foreach (var pet in petList)
             {
-                _.CWL($"Id: {pet.Id} Name:{pet.Name} PetType:{pet.Type} Color:{pet.Color} Birthday:{pet.Birthday} SoldDate:{pet.SoldDate} Price:{pet.Price}");
+                _.CWL($"Id: {pet.Id} Name:{pet.Name} PetType:{pet.Type.Name} Pettype ID:{pet.Type.Id} Color:{pet.Color} Birthday:{pet.Birthday} SoldDate:{pet.SoldDate} Price:{pet.Price}");
             }
 
             _.CRL();
+        }
+
+        public double DoubleInput()
+        {
+            double doInput;
+            string strInput = _.CRL();
+            while (!double.TryParse(strInput,out doInput))
+            {
+                _.CWL(StringContants.IntInvalid);
+                strInput = _.CRL();
+            }
+            return doInput;
+        }
+
+        public int IntInput()
+        {
+            int intinput;
+            string strInput = _.CRL();
+            while (!int.TryParse(strInput,out intinput))
+            {
+                _.CWL(StringContants.IntInvalid);
+                strInput = _.CRL();
+            }
+
+            return intinput;
+        }
+        public DateTime DateTimeInput()
+        {
+            DateTime DtInput;
+            string strInput = _.CRL();
+            while (!DateTime.TryParse(strInput,out DtInput))
+            {
+                _.CWL(StringContants.InvalidDateTIme);
+                strInput = _.CRL();
+            }
+
+            return DtInput;
+        }
+        
+
+        public void PrintPetTypeList()
+        {
+            List<PetType> petTypesList = _petTypeService.GetAllPetTypes();
+
+            foreach (var petType in petTypesList)
+            {
+                _.CWL($"Name: {petType.Name} Id:{petType.Id}");
+            }
+            _.CWL("");
         }
 
         public void AddPet()
@@ -95,11 +147,46 @@ namespace SH.PetShop.UI
 
             while (addMorePet)
             {
+                // Message of add pet and add petname and save input
                 _.CWL(StringContants.AddPetMes);
                 _.CWL(StringContants.AddPetName);
                 string strNameInput = _.CRL();
-                _.CWL(StringContants.AddPetTypeToPet);
                 
+                // Message of Add pettype and save input
+                _.CWL(StringContants.AddPetTypeToPet);
+                _.CWL(StringContants.ChooseByIdPetType);
+                PrintPetTypeList();
+                PetType petType = _petTypeService.GetPetTypeById(IntInput());
+                
+                // Message of add pet Color And save input
+                _.CWL($"\n{StringContants.AddPetColor}");
+                string strColorInput = _.CRL();
+                
+                // Message of add pet birthday and save input
+                _.CWL(StringContants.AddPetBirthday);
+                DateTime birthday = DateTimeInput();
+                
+                // message of add pet solddate and save input
+                _.CWL(StringContants.AddPetSoldDate);
+                DateTime solddDate = DateTimeInput();
+                
+                // message of add price and save input
+                _.CWL(StringContants.AddPetPrice);
+                double price = DoubleInput();
+                
+                // Add the pet to List and Print the added pet.
+                _service.CreatePet(strNameInput, petType, strColorInput, birthday, solddDate, price);
+                _.CWL($"you have added the pet Name:{strNameInput} PetType:{petType.Name} Pettype ID {petType.Id}  Color:{strColorInput} Birthday:{birthday} SoldTime{solddDate} Price: {price}");
+                _.CWL("");
+                
+                _.CWL($"{StringContants.AddMorePet} \n{StringContants.BackToMain}");
+                int intAddMore = IntInput();
+
+                if (intAddMore != 1)
+                {
+                    addMorePet = false;
+                }
+
             }
 
         }

@@ -11,10 +11,18 @@ namespace SH.PetShop.UI
         static void Main(string[] args)
         {
             
+            
+            
+            
             IPetRepositstorie petRepo = new PetInMemory();
+            IPetTypeRepositorie petTypeRepo = new PetTypeInMemory();
+            
             IPetService petService = new PetService(petRepo);
-            var menu = new Menu(petService);
+            IPetTypeService petTypeService = new PetTypeService(petTypeRepo);
+                
+            var menu = new Menu(petService,petTypeService);
             menu.ShowMenu();
+            menu.MenuSwitch();
 
         }
     }

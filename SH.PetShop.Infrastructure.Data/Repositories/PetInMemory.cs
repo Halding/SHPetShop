@@ -32,5 +32,12 @@ namespace SH.PetShop.Infrastructure.Data.Repositories
         {
             return _petList;
         }
+
+        public Pet RemovePet(int id)
+        {
+            var pet = _petList.Find(p => p.Id == id);
+            _petList.Remove(pet);
+            return pet;
+        }
     }
 }

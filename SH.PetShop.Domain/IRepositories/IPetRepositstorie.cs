@@ -10,5 +10,8 @@ namespace SH.PetShop.Domain.IRepositories
 
         List<Pet> GetAllPets();
 
+        Pet RemovePet(int id);
+
+
     }
 }

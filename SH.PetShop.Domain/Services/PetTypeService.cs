@@ -8,7 +8,7 @@ namespace SH.PetShop.Domain.Services
     public class PetTypeService : IPetTypeService
     {
         private IPetTypeRepositorie _repo;
-
+            
         public PetTypeService(IPetTypeRepositorie repo)
         {
             _repo = repo;
@@ -16,12 +16,12 @@ namespace SH.PetShop.Domain.Services
         
         public List<PetType> GetAllPetTypes()
         {
-            throw new System.NotImplementedException();
+            return _repo.FindAllPetTypes();
         }
 
         public PetType GetPetTypeById(int id)
         {
-            throw new System.NotImplementedException();
+           return _repo.FindPetTypeById(id);
         }
     }
 }

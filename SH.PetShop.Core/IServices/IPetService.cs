@@ -8,7 +8,7 @@ namespace SH.PetShop.Core.IServices
     {
         List<Pet> GetAllPets();
 
-        Pet CreatePet(string name,string color,DateTime birthday,DateTime soldDate,double price);
+        Pet CreatePet(string name,PetType type,string color,DateTime birthday,DateTime soldDate,double price);
 
         Pet DeletePet(int id);
 

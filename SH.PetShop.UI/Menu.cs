@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Runtime.CompilerServices;
 using SH.PetShop.Core.IServices;
 using SH.PetShop.Core.Models;
@@ -13,23 +14,21 @@ namespace SH.PetShop.UI
         private Util _ = new Util();
         private StringContants SC = new StringContants();
         private int _menuSeleceted;
-        
+
         public string[] menuItems =
         {
-          "List All Pets",
-          "Add New Pet",
-          "Delete a Pet",
-          "Search for Pet",
-          "Edit Pet",
-          "Exit"
-            
+            "List All Pets",
+            "Add New Pet",
+            "Delete a Pet",
+            "Search for Pet",
+            "Edit Pet",
+            "Exit"
         };
 
         public Menu(IPetService service, IPetTypeService typeService)
         {
             _service = service;
             _petTypeService = typeService;
-
         }
 
         public void ShowMenu()
@@ -40,6 +39,7 @@ namespace SH.PetShop.UI
             {
                 _.CWL($"Press ({i + 1}) {menuItems[i]}");
             }
+
             _menuSeleceted = IntInput();
         }
 
@@ -49,7 +49,6 @@ namespace SH.PetShop.UI
             {
                 switch (_menuSeleceted)
                 {
-                
                     case 1:
                         PrintPetList();
                         break;
@@ -60,17 +59,18 @@ namespace SH.PetShop.UI
                         RemovePet();
                         break;
                     case 4:
+                        SearchByType();
                         break;
-                    case  5:
+                    case 5:
                         break;
                     default:
-                    _.CWL(StringContants.IntInvalid);
-                    _.CRL();
+                        _.CWL(StringContants.IntInvalid);
+                        _.CRL();
                         break;
                 }
+
                 ShowMenu();
             }
-            
         }
 
         public void RemovePet()
@@ -86,7 +86,8 @@ namespace SH.PetShop.UI
 
             foreach (var pet in petList)
             {
-                _.CWL($"Id: {pet.Id} Name:{pet.Name} PetType:{pet.Type.Name} Pettype ID:{pet.Type.Id} Color:{pet.Color} Birthday:{pet.Birthday} SoldDate:{pet.SoldDate} Price:{pet.Price}");
+                _.CWL(
+                    $"Id: {pet.Id} Name:{pet.Name} PetType:{pet.Type.Name} Pettype ID:{pet.Type.Id} Color:{pet.Color} Birthday:{pet.Birthday} SoldDate:{pet.SoldDate} Price:{pet.Price}");
             }
 
             _.CRL();
@@ -96,11 +97,12 @@ namespace SH.PetShop.UI
         {
             double doInput;
             string strInput = _.CRL();
-            while (!double.TryParse(strInput,out doInput))
+            while (!double.TryParse(strInput, out doInput))
             {
                 _.CWL(StringContants.IntInvalid);
                 strInput = _.CRL();
             }
+
             return doInput;
         }
 
@@ -108,7 +110,7 @@ namespace SH.PetShop.UI
         {
             int intinput;
             string strInput = _.CRL();
-            while (!int.TryParse(strInput,out intinput))
+            while (!int.TryParse(strInput, out intinput))
             {
                 _.CWL(StringContants.IntInvalid);
                 strInput = _.CRL();
@@ -116,11 +118,12 @@ namespace SH.PetShop.UI
 
             return intinput;
         }
+
         public DateTime DateTimeInput()
         {
             DateTime DtInput;
             string strInput = _.CRL();
-            while (!DateTime.TryParse(strInput,out DtInput))
+            while (!DateTime.TryParse(strInput, out DtInput))
             {
                 _.CWL(StringContants.InvalidDateTIme);
                 strInput = _.CRL();
@@ -128,7 +131,32 @@ namespace SH.PetShop.UI
 
             return DtInput;
         }
-        
+
+        public void SearchByType()
+        {
+            string strInput;
+            _.CWL(StringContants.SearchType);
+            strInput = _.CRL();
+            string newStrInput = $"{strInput[0].ToString().ToUpper() + strInput.Substring(1).ToLower()}";
+            switch (newStrInput)
+            {
+                case "Cat":
+                case "Dog":
+                case "Pig":
+                    var petList = _service.SearchPetByType(strInput);
+                    foreach (var pet in petList)
+                    {
+                        _.CWL($"Id: {pet.Id} Name:{pet.Name} PetType:{pet.Type.Name} Pettype ID:{pet.Type.Id} Color:{pet.Color} Birthday:{pet.Birthday} SoldDate:{pet.SoldDate} Price:{pet.Price}");
+                    }
+                    _.CRL();
+                    break;
+                default:
+                    _.CWL(StringContants.StrInvalid);
+                    SearchByType();
+                    break;
+            }
+        }
+
 
         public void PrintPetTypeList()
         {
@@ -138,6 +166,7 @@ namespace SH.PetShop.UI
             {
                 _.CWL($"Name: {petType.Name} Id:{petType.Id}");
             }
+
             _.CWL("");
         }
 
@@ -151,34 +180,35 @@ namespace SH.PetShop.UI
                 _.CWL(StringContants.AddPetMes);
                 _.CWL(StringContants.AddPetName);
                 string strNameInput = _.CRL();
-                
+
                 // Message of Add pettype and save input
                 _.CWL(StringContants.AddPetTypeToPet);
                 _.CWL(StringContants.ChooseByIdPetType);
                 PrintPetTypeList();
                 PetType petType = _petTypeService.GetPetTypeById(IntInput());
-                
+
                 // Message of add pet Color And save input
                 _.CWL($"\n{StringContants.AddPetColor}");
                 string strColorInput = _.CRL();
-                
+
                 // Message of add pet birthday and save input
                 _.CWL(StringContants.AddPetBirthday);
                 DateTime birthday = DateTimeInput();
-                
+
                 // message of add pet solddate and save input
                 _.CWL(StringContants.AddPetSoldDate);
                 DateTime solddDate = DateTimeInput();
-                
+
                 // message of add price and save input
                 _.CWL(StringContants.AddPetPrice);
                 double price = DoubleInput();
-                
+
                 // Add the pet to List and Print the added pet.
                 _service.CreatePet(strNameInput, petType, strColorInput, birthday, solddDate, price);
-                _.CWL($"you have added the pet Name:{strNameInput} PetType:{petType.Name} Pettype ID {petType.Id}  Color:{strColorInput} Birthday:{birthday} SoldTime{solddDate} Price: {price}");
+                _.CWL(
+                    $"you have added the pet Name:{strNameInput} PetType:{petType.Name} Pettype ID {petType.Id}  Color:{strColorInput} Birthday:{birthday} SoldTime{solddDate} Price: {price}");
                 _.CWL("");
-                
+
                 _.CWL($"{StringContants.AddMorePet} \n{StringContants.BackToMain}");
                 int intAddMore = IntInput();
 
@@ -186,12 +216,7 @@ namespace SH.PetShop.UI
                 {
                     addMorePet = false;
                 }
-
             }
-
         }
-        
-        
-        
     }
 }

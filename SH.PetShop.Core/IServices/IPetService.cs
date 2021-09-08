@@ -12,7 +12,7 @@ namespace SH.PetShop.Core.IServices
 
         Pet DeletePet(int id);
 
-        List<Pet> SearchPetByType(PetType type);
+        List<Pet> SearchPetByType(string type);
 
         List<Pet> SearchPetName(string name);
 

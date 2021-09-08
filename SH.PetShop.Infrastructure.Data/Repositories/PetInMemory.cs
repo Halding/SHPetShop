@@ -8,8 +8,8 @@ namespace SH.PetShop.Infrastructure.Data.Repositories
 {
     public class PetInMemory : IPetRepositstorie
     {
-        private int _id = 1;
-        private List<Pet> _petList = new List<Pet>();
+        private static int _id = 1;
+        private static List<Pet> _petList = new List<Pet>();
         
 
         public Pet AddPet(string name, PetType type, string color, double price, DateTime birthday, DateTime soldTime)

@@ -31,9 +31,11 @@ namespace SH.PetShop.Domain.Services
             return _repo.RemovePet(id);
         }
 
-        public List<Pet> SearchPetByType(PetType type)
+        public List<Pet> SearchPetByType(string type)
         {
-            throw new NotImplementedException();
+
+            List<Pet> searchPetList = _repo.GetAllPets().FindAll(pt => pt.Type.Name == type);
+            return searchPetList;
         }
 
         public List<Pet> SearchPetName(string name)

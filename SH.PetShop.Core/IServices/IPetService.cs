@@ -20,5 +20,7 @@ namespace SH.PetShop.Core.IServices
 
         Pet EditPet(int id);
 
+        Pet GetPetById(int id);
+
     }
 }

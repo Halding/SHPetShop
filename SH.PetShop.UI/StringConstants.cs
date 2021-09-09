@@ -17,8 +17,10 @@ namespace SH.PetShop.UI
         public const string BackToMain = "Press 0  to get back to Main";
         public const string AddMorePet = "Press 1 to Add one more pet";
         public const string RemovePetById = "Please enter the ID of the pet you want to remove";
+        public const string EditPetById = "Please enter the ID of the pet you want to Edit";
         public const string SearchType = "Please enter name of PetType you want to find pets from\n The Pettype is :Cat :Dog : Pig ";
         public const string StrInvalid = "Input wasnt a String or was null try again";
+        public const string PetIdNull = "There wasnt any pet with that ID try again";
 
         public const string AddPetBirthday =
             "Please Enter the Birthday of your pet in the Format: DD-MM-YYYY rememeber \"-\" ";

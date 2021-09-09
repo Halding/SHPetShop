@@ -52,5 +52,10 @@ namespace SH.PetShop.Domain.Services
         {
             throw new NotImplementedException();
         }
+
+        public Pet GetPetById(int id)
+        {
+            return _repo.GetPetById(id);
+        }
     }
 }

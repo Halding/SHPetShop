@@ -62,6 +62,7 @@ namespace SH.PetShop.UI
                         SearchByType();
                         break;
                     case 5:
+                        EditPet();
                         break;
                     default:
                         _.CWL(StringContants.IntInvalid);
@@ -137,8 +138,8 @@ namespace SH.PetShop.UI
             string strInput;
             _.CWL(StringContants.SearchType);
             strInput = _.CRL();
-            string newStrInput = $"{strInput[0].ToString().ToUpper() + strInput.Substring(1).ToLower()}";
-            switch (newStrInput)
+            strInput = $"{strInput[0].ToString().ToUpper() + strInput.Substring(1).ToLower()}";
+            switch (strInput)
             {
                 case "Cat":
                 case "Dog":
@@ -169,6 +170,58 @@ namespace SH.PetShop.UI
 
             _.CWL("");
         }
+
+        public void EditPet()
+        {
+            _.CWL(StringContants.EditPetById);
+            var intInput = IntInput();
+            Pet pet = _service.GetPetById(intInput);
+            while (pet == null)
+            { 
+                _.CWL(StringContants.PetIdNull);
+                intInput = IntInput();
+                pet = _service.GetPetById(intInput);
+            }
+            
+            // Name to edit
+            _.CWL(StringContants.AddPetName);
+            string strNameInput = _.CRL();
+            
+            // Pet type to edit
+            _.CWL(StringContants.ChooseByIdPetType);
+            PrintPetTypeList();
+            PetType petType = _petTypeService.GetPetTypeById(IntInput());
+            
+            // Pet Color to edit
+            _.CWL($"\n{StringContants.AddPetColor}");
+            string strColorInput = _.CRL();
+            
+            // Birthday to edit
+            _.CWL(StringContants.AddPetBirthday);
+            DateTime birthday = DateTimeInput();
+            
+            
+            // Solddate to edit
+            _.CWL(StringContants.AddPetSoldDate);
+            DateTime solddDate = DateTimeInput();
+            
+            //price to edit
+            _.CWL(StringContants.AddPetPrice);
+            double price = DoubleInput();
+
+            pet.Name = strNameInput;
+            pet.Type = petType;
+            pet.Color = strColorInput;
+            pet.Birthday = birthday;
+            pet.SoldDate = solddDate;
+            pet.Price = price;
+            
+            _.CWL(
+                $"you have Edit the pet. the info is now - the pet Name:{strNameInput} PetType:{petType.Name} Pettype ID {petType.Id}  Color:{strColorInput} Birthday:{birthday} SoldTime{solddDate} Price: {price}");
+            _.CWL("");
+
+        }
+        
 
         public void AddPet()
         {

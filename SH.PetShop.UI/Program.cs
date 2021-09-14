@@ -11,9 +11,6 @@ namespace SH.PetShop.UI
         static void Main(string[] args)
         {
             
-            
-            
-            
             IPetRepositstorie petRepo = new PetInMemory();
             IPetTypeRepositorie petTypeRepo = new PetTypeInMemory();
             
